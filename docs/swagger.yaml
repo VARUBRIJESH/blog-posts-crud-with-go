@@ -1,0 +1,188 @@
+definitions:
+  main.BlogPost:
+    properties:
+      body:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  main.BlogPostRequest:
+    properties:
+      body:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  main.DeleteResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a simple CRUD API for blog posts.
+  title: Blog Post APIs
+  version: "1.0"
+paths:
+  /api/blog-post:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all blog posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of blog posts" // Use BlogPost for the response
+          schema:
+            $ref: '#/definitions/main.BlogPost'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all blog posts
+    post:
+      consumes:
+      - application/json
+      description: Create a new blog post with title, description, and body
+      parameters:
+      - description: Create Blog Post
+        in: body
+        name: blogPost
+        required: true
+        schema:
+          $ref: '#/definitions/main.BlogPostRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Successfully created blog post" // Use BlogPost for the response
+          schema:
+            $ref: '#/definitions/main.BlogPost'
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new blog post
+  /api/blog-post/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a blog post by ID
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.DeleteResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.DeleteResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.DeleteResponse'
+      summary: Delete a blog post
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a blog post by its ID
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of blog posts" // Use BlogPost for the response
+          schema:
+            $ref: '#/definitions/main.BlogPost'
+        "404":
+          description: Blog post not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a single blog post
+    patch:
+      consumes:
+      - application/json
+      description: Update the title, description, and/or body of an existing blog
+        post by its ID
+      parameters:
+      - description: Blog Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated blog post data
+        in: body
+        name: blogPost
+        required: true
+        schema:
+          $ref: '#/definitions/main.BlogPostRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully updated blog post" // Return the updated blog
+            post details
+          schema:
+            $ref: '#/definitions/main.BlogPost'
+        "400":
+          description: Invalid request body
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Blog post not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an existing blog post
+swagger: "2.0"
